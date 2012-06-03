@@ -68,7 +68,6 @@ def setTimestamp(ts=0):
 	f.write(dumps({'timestamp': ts}, indent=4) + "\n")
 	f.close()
 
-
 def validateArgs(args):
 	if not len(args.acct_sid) == SID_LEN:
 		raise ValueError('The APP_SID is not the proper length (' + str(SID_LEN) + ')')
