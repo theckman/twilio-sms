@@ -23,53 +23,41 @@
 from os import environ, mkdir, path
 from time import time
 
-####
-# User editable options
-#
-# These first two options are obtained from your Twilio dashboard
-# - https://www.twilio.com/user/account
-ACCT_SID = ""
-ACCT_TOKEN = ""
-#
-# Phone number section.  Please only the numbers, no other characters
-# The number you are notifying (your phone number)
-TO_NUMBER = ""
-#
-# The Twilio number you are sending the SMS from.  They can be from the following
-# two pages:
-# - https://www.twilio.com/user/account/phone-numbers/incoming
-# - https://www.twilio.com/user/account/phone-numbers/verified
-FROM_NUMBER = ""
-#
-# the delay in minutes before a the next SMS will be sent
-DELAY = 15
-#
-# Do not edit past this point
-####
-
-TN_DIR = environ['HOME'] + "/.twilio-notifier/"
-TN_FILE = TN_DIR + "twilio-notifier.json"
+CONF_DIR = 'conf/'
+CONF_FILE = 'twilio-notifier.json'
+EMPTY_OPTS = { 'acct_sid': '', 'acct_token': '', 'to_number': '', 'from_number': '', 'message': '', 'delay': 60, 'timestamp': 0 }
 SID_LEN = 34
 
-def getTimestamp():
-	from json import loads
-	f = open(TN_FILE)
-	with f:
-		return loads(f.read())
+def check_message(message):
+	if len(message) > 160:
+		message = message[0:157] + '...'
+	return message
 
-def setTimestamp(ts=0):
-	'Set the UNIX timestamp for flood protection.'
+def writeConfig(config=CONF_FILE, acct_sid='', acct_token='', to_number='', from_number='', message='', delay=60, timestamp=0):
+	args = locals()
+	del(args['config'])
+	args['message'] = check_message(args['message'])
 	from json import dumps
-	try:
-		f = open(TN_FILE, 'w+')
-	except IOError:
-		mkdir(TN_DIR)
-		f = open(TN_FILE, 'w+')
-	f.write(dumps({'timestamp': ts}, indent=4) + "\n")
+	f = open(CONF_DIR+config, 'w')
+	f.write(dumps(args, indent=4, sort_keys=True) + "\n")
 	f.close()
 
-def validateArgs(args):
-	if not args.reset:
+def getConfig(config=CONF_FILE):
+	from json import loads
+	try:
+		c = open(CONF_DIR+config, 'r')
+	except IOError:
+		writeConfig(config)
+
+	c = open(CONF_DIR+config, 'r')
+	with c:
+		return loads(c.read())
+
+def updateTimestamp(args, timestamp=0):
+	writeConfig(args.config, args.acct_sid, args.acct_token, args.to_number, args.from_number, args.message, args.delay, timestamp)
+
+def validateArgs(args, strict):
+	if not args.reset and strict:
 		if not len(args.acct_sid) == SID_LEN:
 			raise ValueError('The APP_SID is not the proper length (' + str(SID_LEN) + ')')
 		if args.message == None or len(str(args.message).strip()) < 1:
@@ -78,41 +66,40 @@ def validateArgs(args):
 			raise ValueError("Either the recipient or sending number are not valid (needs to be at least 10 digits)")
 	return args
 
-def getArgs():
+def getArgs(opts, strict=True):
 	from optparse import OptionParser
 	usage = "\t%prog [options]"
 	o = OptionParser(usage=usage)
-	o.add_option("-a", "--acct-sid", dest="acct_sid", default=ACCT_SID, help="The account SID for your Twilio account.")
-	o.add_option("-m", "--message", dest="message", help="The body of the SMS you are sending")
-	o.add_option("-r", "--recipient", dest="to_number", default=TO_NUMBER, help="The recipient of the SMS message")
-	o.add_option("-s", "--sender", dest="from_number", default=FROM_NUMBER, help="The phone number to have the SMS message appear from")
-	o.add_option("-t", "--acct-token", dest="acct_token", default=ACCT_TOKEN, help="The account token for your Twilio account")
+	o.add_option("-a", "--acct-sid", dest="acct_sid", default=opts['acct_sid'], help="The account SID for your Twilio account.")
+	o.add_option("-c", "--config", dest="config", default=CONF_FILE, help="configuration file to use")
+	o.add_option("-d", "--delay", dest="delay", default=opts['delay'], help="delay to use between texts, soft-override compared to '--reset'")
+	o.add_option("-m", "--message", dest="message", default=opts['message'], help="The body of the SMS you are sending")
+	o.add_option("-r", "--recipient", dest="to_number", default=opts['to_number'], help="The recipient of the SMS message")
+	o.add_option("-s", "--sender", dest="from_number", default=opts['from_number'], help="The phone number to have the SMS message appear from")
+	o.add_option("-t", "--acct-token", dest="acct_token", default=opts['acct_token'], help="The account token for your Twilio account")
 	o.add_option("--force", action="store_true", default=False, dest="force", help="force SMS even if delay period hasn't elapsed")
 	o.add_option("--reset", action="store_true", default=False, dest="reset", help="Reset delay timestamp so next time script is called the message is sent")
-	(opts, args) = o.parse_args()
-	return validateArgs(opts)
+	(opt, args) = o.parse_args()
+	return validateArgs(opt, strict)
 
-def sendMsg(sid, token, to_number, from_number, message, timestamp, force=False):
-	if force or int(time()) - timestamp > DELAY * 60:
-		message = message.strip()
-		if len(message) > 160:
-			message = message[0:157] + '...'
+def sendMsg(sid, token, to_number, from_number, message, timestamp, force=False, delay=60):
+	if force or int(time()) - timestamp > delay * 60:
+		message = check_message(message.strip())
 		from twilio.rest import TwilioRestClient
 		client = TwilioRestClient(sid, token)
-		message = client.sms.messages.create(to=to_number, from_=from_number, body=message)
+		sms = client.sms.messages.create(to=to_number, from_=from_number, body=message)
 		return True
 
 	return False
 
 if __name__ == "__main__":
-	args = getArgs()
+	args = getArgs(EMPTY_OPTS, strict=False) # This is but a clever hack to get config file to use from getArgs...
+	opts = getConfig(args.config)
+	args = getArgs(opts)
+
 	if args.reset:
-		setTimestamp()
+		updateTimestamp(args)
 		quit()
-	if not path.exists(TN_FILE):
-		setTimestamp()
 
-	ts = getTimestamp()['timestamp']
-
-	if sendMsg(args.acct_sid, args.acct_token, args.to_number, args.from_number, args.message, ts, args.force):
-		setTimestamp(int(time()))
+	if sendMsg(args.acct_sid, args.acct_token, args.to_number, args.from_number, args.message, opts['timestamp'], args.force, opts['delay']):
+		updateTimestamp(args, int(time()))
