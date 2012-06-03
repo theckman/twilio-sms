@@ -79,14 +79,15 @@ def validateArgs(args):
 
 def getArgs():
 	from optparse import OptionParser
-	o = OptionParser()
-	o.add_option("-a", "--acct-sid", dest="acct_sid", default=ACCT_SID, help="account SID")
-	o.add_option("-m", "--message", dest="message", help="body of the text message")
-	o.add_option("-r", "--recipient", dest="to_number", default=TO_NUMBER, help="number to call")
-	o.add_option("-s", "--sender", dest="from_number", default=FROM_NUMBER, help="number to call from")
-	o.add_option("-t", "--acct-token", dest="acct_token", default=ACCT_TOKEN, help="account token")
-	o.add_option("--force", action="store_true", default=False, dest="force", help="force SMS even if sleep period hasn't elapsed")
-	o.add_option("--reset", action="store_true", default=False, dest="reset", help="reset sleep timestamp")
+	usage = "\t%prog [options]"
+	o = OptionParser(usage=usage)
+	o.add_option("-a", "--acct-sid", dest="acct_sid", default=ACCT_SID, help="The account SID for your Twilio account.")
+	o.add_option("-m", "--message", dest="message", help="The body of the SMS you are sending")
+	o.add_option("-r", "--recipient", dest="to_number", default=TO_NUMBER, help="The recipient of the SMS message")
+	o.add_option("-s", "--sender", dest="from_number", default=FROM_NUMBER, help="The phone number to have the SMS message appear from")
+	o.add_option("-t", "--acct-token", dest="acct_token", default=ACCT_TOKEN, help="The account token for your Twilio account")
+	o.add_option("--force", action="store_true", default=False, dest="force", help="force SMS even if delay period hasn't elapsed")
+	o.add_option("--reset", action="store_true", default=False, dest="reset", help="Reset delay timestamp so next time script is called the message is sent")
 	(opts, args) = o.parse_args()
 	return validateArgs(opts)
 
