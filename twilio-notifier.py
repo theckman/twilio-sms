@@ -69,12 +69,13 @@ def setTimestamp(ts=0):
 	f.close()
 
 def validateArgs(args):
-	if not len(args.acct_sid) == SID_LEN:
-		raise ValueError('The APP_SID is not the proper length (' + str(SID_LEN) + ')')
-	if not args.reset and args.message == None or len(str(args.message).strip()) < 1:
-		raise ValueError('You did not provide a valid message')
-	if len(args.to_number) < 10 or len(args.to_number) < 10:
-		raise ValueError("Either the recipient or sending number are not valid (needs to be at least 10 digits)")
+	if not args.reset:
+		if not len(args.acct_sid) == SID_LEN:
+			raise ValueError('The APP_SID is not the proper length (' + str(SID_LEN) + ')')
+		if args.message == None or len(str(args.message).strip()) < 1:
+			raise ValueError('You did not provide a valid message')
+		if len(args.to_number) < 10 or len(args.to_number) < 10:
+			raise ValueError("Either the recipient or sending number are not valid (needs to be at least 10 digits)")
 	return args
 
 def getArgs():
