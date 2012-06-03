@@ -41,13 +41,14 @@ TO_NUMBER = ""
 # - https://www.twilio.com/user/account/phone-numbers/verified
 FROM_NUMBER = ""
 #
+# the delay in minutes before a the next SMS will be sent
+DELAY = 15
+#
 # Do not edit past this point
 ####
 
 TN_DIR = environ['HOME'] + "/.twilio-notifier/"
 TN_FILE = TN_DIR + "twilio-notifier.json"
-DELAY = 15
-
 SID_LEN = 34
 
 def getTimestamp():
