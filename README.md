@@ -1,6 +1,6 @@
 Twilio Notifier
 ===============
-This is a Twilio Notifier script written in Python.  This script was built to simply send SMS messages to the number of your choosing using Twilio.  While not capable now, this will eventually be able to be used as a module so you can bolt it on to your scripts.
+This is a [Twilio](https://www.twilio.com/) Notifier script written in Python.  This script was built to simply send SMS messages to the number of your choosing using Twilio.  While not capable now, this will eventually be able to be used as a module so you can bolt it on to your scripts.
 
 This is still a work in progress.  All attempts will be made to not alter any of the current features to ensure backwards compatibility.
 
