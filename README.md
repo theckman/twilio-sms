@@ -1,8 +1,12 @@
-Twilio Notifier
+Twilio SMS
 ===============
-This is a [Twilio](https://www.twilio.com/) Notifier script written in Python.  This script was built to simply send SMS messages to the number of your choosing using Twilio.  While not capable now, this will eventually be able to be used as a module so you can bolt it on to your scripts.
+This is a [Twilio](https://www.twilio.com/) SMS script written in Python.  This script was built to simply send SMS messages to the number of your choosing using Twilio.  While not capable now, this will eventually be able to be used as a module so you can bolt it on to your scripts.
 
 This is still a work in progress.  All attempts will be made to not alter any of the current features to ensure backwards compatibility.
+
+Goal
+----
+The goal of this script is to be able to easily send yourself notifications from different UNIX-like systems you are running.  My personal use case for this script is to be able to send myself notifications about private messages and highlights in irssi.  This irssi plugin will be uploaded to github as well, after some testing.
 
 Requirements
 ------------
@@ -13,7 +17,7 @@ Configuration
 
 The configuration files are stored in the `conf` directory.  Each The configuration is currently stored within the script itself.  The configuration is entirely optional, as all options can be passed on the command-line.  Additionally, if you specify an option on the command-line it will override the value stored in the file.
 
-By default, the script loads the `conf/twilio-notifier.json` configuration file.  You can specify a different configuration file on the command-line (see below).  The benefit of being able to select configs via the command line, is you can predefine numbers and messages in separate configuration files and load each one as needed.
+By default, the script loads the `conf/twilio-sms.json` configuration file.  You can specify a different configuration file on the command-line (see below).  The benefit of being able to select configs via the command line, is you can predefine numbers and messages in separate configuration files and load each one as needed.
 
 **Note:** Passing your account SID or token on the command-line may be a security risk, as that will live in your shell history
 
@@ -45,7 +49,7 @@ Script Usage
 
 Here is the output of the help information for the script:
 
-	Usage: 	twilio-notifier.py [options]
+	Usage: 	twsms.py [options]
 
 	Options:
 	  -h, --help            show this help message and exit
@@ -70,11 +74,11 @@ Here is the output of the help information for the script:
 
 Assuming you have the SID and token configured within the configuration file itself, you could run this command to send a message to yourself from one of your Twilio numbers.
 
-`twilio-notifier.py -s 5055553842 -r 5055553243 -m "This is a message from Twilio"`
+`twsms.py -s 5055553842 -r 5055553243 -m "This is a message from Twilio"`
 
 As mentioned above, you can specify which config to load via the command-line.  Assuming your configuration file has all values filled out, including message, you could run this command to send a message based on a configuration file:
 
-`twilio-notifier.py -c notify-me.json`
+`twsms.py -c notify-me.json`
 
 License
 -------
