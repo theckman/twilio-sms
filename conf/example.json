@@ -1,9 +1,10 @@
 {
-    "acct_sid": "", 
-    "acct_token": "", 
-    "delay": 15, 
-    "from_number": "", 
-    "message": "", 
-    "timestamp": 0, 
+    "acct_sid": "",
+    "acct_token": "",
+    "delay": 60,
+    "force": 0,
+    "from_number": "",
+    "message": "",
+    "timestamp": 0,
     "to_number": ""
 }

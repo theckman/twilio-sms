@@ -25,7 +25,7 @@ from time import time
 
 CONF_DIR = 'conf/'
 CONF_FILE = 'twilio-sms.json'
-EMPTY_OPTS = { 'acct_sid': '', 'acct_token': '', 'to_number': '', 'from_number': '', 'message': '', 'delay': 60, 'timestamp': 0 }
+EMPTY_OPTS = { 'acct_sid': '', 'acct_token': '', 'to_number': '', 'from_number': '', 'message': '', 'force': 0, 'delay': 60, 'timestamp': 0 }
 SID_LEN = 34
 
 def check_message(message):
@@ -33,7 +33,7 @@ def check_message(message):
 		message = message[0:157] + '...'
 	return message
 
-def writeConfig(config=CONF_FILE, acct_sid='', acct_token='', to_number='', from_number='', message='', delay=60, timestamp=0):
+def writeConfig(config=CONF_FILE, acct_sid='', acct_token='', to_number='', from_number='', message='', force=0, delay=60, timestamp=0):
 	args = locals()
 	del(args['config'])
 	args['message'] = check_message(args['message'])
@@ -54,7 +54,7 @@ def getConfig(config=CONF_FILE):
 		return loads(c.read())
 
 def updateTimestamp(args, timestamp=0):
-	writeConfig(args.config, args.acct_sid, args.acct_token, args.to_number, args.from_number, args.message, args.delay, timestamp)
+	writeConfig(args.config, args.acct_sid, args.acct_token, args.to_number, args.from_number, args.message, args.force, args.delay, timestamp)
 
 def validateArgs(args, strict):
 	if not args.reset and strict:
@@ -77,12 +77,12 @@ def getArgs(opts, strict=True):
 	o.add_option("-r", "--recipient", dest="to_number", default=opts['to_number'], help="The recipient of the SMS message")
 	o.add_option("-s", "--sender", dest="from_number", default=opts['from_number'], help="The phone number to have the SMS message appear from")
 	o.add_option("-t", "--acct-token", dest="acct_token", default=opts['acct_token'], help="The account token for your Twilio account")
-	o.add_option("--force", action="store_true", default=False, dest="force", help="force SMS even if delay period hasn't elapsed")
+	o.add_option("--force", action="store_true", default=opts['force'], dest="force", help="force SMS even if delay period hasn't elapsed")
 	o.add_option("--reset", action="store_true", default=False, dest="reset", help="Reset delay timestamp so next time script is called the message is sent")
 	(opt, args) = o.parse_args()
 	return validateArgs(opt, strict)
 
-def sendMsg(sid, token, to_number, from_number, message, timestamp, force=False, delay=60):
+def sendMsg(sid, token, to_number, from_number, message, force=False, delay=60, timestamp=0):
 	if force or int(time()) - timestamp > delay * 60:
 		message = check_message(message.strip())
 		from twilio.rest import TwilioRestClient
@@ -101,5 +101,5 @@ if __name__ == "__main__":
 		updateTimestamp(args)
 		quit()
 
-	if sendMsg(args.acct_sid, args.acct_token, args.to_number, args.from_number, args.message, opts['timestamp'], args.force, opts['delay']):
+	if sendMsg(args.acct_sid, args.acct_token, args.to_number, args.from_number, args.message, args.force, opts['delay'], opts['timestamp']):
 		updateTimestamp(args, int(time()))
