@@ -12,9 +12,12 @@ Requirements
 ------------
 This script was written for Python 2.x and request the twilio module to be available.  Nothing too crazy. :)
 
+Tools that use Twilio SMS
+---------------------------
+* [Trigger SMS](https://github.com/theckman/trigger-sms) - irssi script to send notifications about highlights and private messages using Twilio SMS
+
 Configuration
 -------------
-
 The configuration files are stored in the `conf` directory.  Each The configuration is currently stored within the script itself.  The configuration is entirely optional, as all options can be passed on the command-line.  Additionally, if you specify an option on the command-line it will override the value stored in the file.
 
 By default, the script loads the `conf/twilio-sms.json` configuration file.  You can specify a different configuration file on the command-line (see below).  The benefit of being able to select configs via the command line, is you can predefine numbers and messages in separate configuration files and load each one as needed.
@@ -47,7 +50,6 @@ There is a final option in the file, `timestamp`, that's used by the script to d
 
 Script Usage
 ------------
-
 Here is the output of the help information for the script:
 
 	Usage: 	twsms.py [options]
