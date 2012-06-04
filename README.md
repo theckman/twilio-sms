@@ -39,7 +39,7 @@ Here are the contents of the example configuration file, `conf/example.json`:
 
 * `acct_sid` - the account SID from your [Twilio Dashboard](https://www.twilio.com/user/account)
 * `acct_token` - the account token from your [Twilio Dashboard](https://www.twilio.com/user/account)
-* `delay` - the minimum amount of time before this script will send the next SMS.  If the script is called within the delay time, the message is simply discarded without being sent and the script exits.
+* `delay` - the minimum amount of time in minutes before this script will allow another SMS to be sent.  If the script is called within the delay time, the message is simply discarded without being sent and the script exits.
 * `from_number` - the [Twilio number](https://www.twilio.com/user/account/phone-numbers/incoming) that the SMS messages will originate from
 * `force` - this is a boolean value as to whether this configuration should always be forced to send the SMS regardless of the delay time
 * `message` - the message to send via SMS to the recipient
