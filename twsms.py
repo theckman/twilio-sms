@@ -98,7 +98,7 @@ if __name__ == "__main__":
 	args = getArgs(opts)
 
 	if args.reset:
-		updateTimestamp(args)
+		updateTimestamp(args, opts, init(time()))
 		quit()
 
 	if sendMsg(args.acct_sid, args.acct_token, args.to_number, args.from_number, args.message, args.force, args.delay, opts['timestamp']):
