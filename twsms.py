@@ -24,7 +24,7 @@ from os import environ, mkdir, path
 from time import time
 
 CONF_DIR = 'conf/'
-CONF_FILE = 'twilio-notifier.json'
+CONF_FILE = 'twilio-sms.json'
 EMPTY_OPTS = { 'acct_sid': '', 'acct_token': '', 'to_number': '', 'from_number': '', 'message': '', 'delay': 60, 'timestamp': 0 }
 SID_LEN = 34
 
