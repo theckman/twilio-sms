@@ -4,6 +4,10 @@ This is a [Twilio](https://www.twilio.com/) Notifier script written in Python.  
 
 This is still a work in progress.  All attempts will be made to not alter any of the current features to ensure backwards compatibility.
 
+Requirements
+------------
+This script was written for Python 2.x and request the twilio module to be available.  Nothing too crazy. :)
+
 Configuration
 -------------
 
