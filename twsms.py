@@ -53,8 +53,8 @@ def getConfig(config=CONF_FILE):
 	with c:
 		return loads(c.read())
 
-def updateTimestamp(args, timestamp=0):
-	writeConfig(args.config, args.acct_sid, args.acct_token, args.to_number, args.from_number, args.message, args.force, args.delay, timestamp)
+def updateTimestamp(config, opts, timestamp=0):
+	writeConfig(config, opts['acct_sid'], opts['acct_token'], opts['to_number'], opts['from_number'], opts['message'], opts['force'], opts['delay'], timestamp)
 
 def validateArgs(args, strict):
 	if not args.reset and strict:
@@ -101,5 +101,5 @@ if __name__ == "__main__":
 		updateTimestamp(args)
 		quit()
 
-	if sendMsg(args.acct_sid, args.acct_token, args.to_number, args.from_number, args.message, args.force, opts['delay'], opts['timestamp']):
-		updateTimestamp(args, int(time()))
+	if sendMsg(args.acct_sid, args.acct_token, args.to_number, args.from_number, args.message, args.force, args.delay, opts['timestamp']):
+		updateTimestamp(args.config, opts, int(time()))
