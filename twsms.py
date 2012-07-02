@@ -83,7 +83,7 @@ def getArgs(opts, strict=True):
 	return validateArgs(opt, strict)
 
 def sendMsg(sid, token, to_number, from_number, message, force=False, delay=60, timestamp=0):
-	if force or int(time()) - timestamp > delay * 60:
+	if force or (int(time()) - timestamp) > (delay * 60):
 		message = check_message(message.strip())
 		from twilio.rest import TwilioRestClient
 		client = TwilioRestClient(sid, token)
