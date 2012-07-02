@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from os import environ, mkdir, path, path
+from os import environ, mkdir, path
 from time import time
 
 CONF_DIR = path.join(path.dirname(__file__), 'conf/')
