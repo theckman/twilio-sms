@@ -20,10 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from os import environ, mkdir, path
+from os import environ, mkdir, path, path
 from time import time
 
-CONF_DIR = 'conf/'
+CONF_DIR = path.join(path.dirname(__file__), 'conf/')
 CONF_FILE = 'twilio-sms.json'
 EMPTY_OPTS = { 'acct_sid': '', 'acct_token': '', 'to_number': '', 'from_number': '', 'message': '', 'force': 0, 'delay': 60, 'timestamp': 0 }
 SID_LEN = 34
