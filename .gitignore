@@ -24,5 +24,7 @@ pip-log.txt
 *.mo
 
 #Mr Developer
+.mr.developer.cfg
+
 /conf/*
 !/conf/example.json
