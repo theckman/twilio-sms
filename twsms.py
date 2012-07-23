@@ -29,8 +29,8 @@ EMPTY_OPTS = { 'acct_sid': '', 'acct_token': '', 'to_number': '', 'from_number':
 SID_LEN = 34
 
 def check_message(message):
-	if len(message) > 160:
-		message = message[0:157] + '...'
+	if len(message) >= 155:
+		message = message[0:152] + '...'
 	return message
 
 def writeConfig(config=CONF_FILE, acct_sid='', acct_token='', to_number='', from_number='', message='', force=0, delay=60, timestamp=0):
