@@ -84,11 +84,13 @@ def getArgs(opts, strict=True):
 
 def sendMsg(sid, token, to_number, from_number, message, force=False, delay=60, timestamp=0):
 	if force or (int(time()) - timestamp) > (delay * 60):
-		message = check_message(message.strip())
 		from twilio.rest import TwilioRestClient
-		client = TwilioRestClient(sid, token)
-		sms = client.sms.messages.create(to=to_number, from_=from_number, body=message)
-		return True
+		message = check_message(message.strip())
+		tclient = TwilioRestClient(sid, token)
+		sms = tclient.sms.messages.create(to=to_number, from_=from_number, body=message)
+		if sms.get('status', 'failed') != "failed":
+			return True
+		else: return False
 
 	return False
 
