@@ -88,7 +88,7 @@ def sendMsg(sid, token, to_number, from_number, message, force=False, delay=60, 
 		message = check_message(message.strip())
 		tclient = TwilioRestClient(sid, token)
 		sms = tclient.sms.messages.create(to=to_number, from_=from_number, body=message)
-		if sms.get('status', 'failed') != "failed":
+		if sms.status != "failed":
 			return True
 		else: return False
 
