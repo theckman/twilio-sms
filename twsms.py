@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (c) 2012 Tim Heckman <timothy.heckman@gmail.com>
+# Copyright (c) 2012 Tim Heckman <tim@timheckman.net>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
