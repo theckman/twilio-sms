@@ -25,7 +25,7 @@ from time import time
 
 CONF_DIR = path.join(path.dirname(__file__), 'conf/')
 CONF_FILE = 'twilio-sms.json'
-EMPTY_OPTS = { 'acct_sid': '', 'acct_token': '', 'to_number': '', 'from_number': '', 'message': '', 'force': 0, 'delay': 60, 'timestamp': 0 }
+EMPTY_OPTS = { 'acct_sid': '', 'acct_token': '', 'to_number': '', 'from_number': '', 'message': '', 'force': 0, 'delay': 3600, 'timestamp': 0 }
 SID_LEN = 34
 
 def check_message(message):
@@ -33,7 +33,7 @@ def check_message(message):
 		message = message[0:152] + '...'
 	return message
 
-def writeConfig(config=CONF_FILE, acct_sid='', acct_token='', to_number='', from_number='', message='', force=0, delay=60, timestamp=0):
+def writeConfig(config=CONF_FILE, acct_sid='', acct_token='', to_number='', from_number='', message='', force=0, delay=3600, timestamp=0):
 	args = locals()
 	del(args['config'])
 	args['message'] = check_message(args['message'])
@@ -82,8 +82,8 @@ def getArgs(opts, strict=True):
 	(opt, args) = o.parse_args()
 	return validateArgs(opt, strict)
 
-def sendMsg(sid, token, to_number, from_number, message, force=False, delay=60, timestamp=0):
-	if force or (int(time()) - timestamp) > (delay * 60):
+def sendMsg(sid, token, to_number, from_number, message, force=False, delay=3600, timestamp=0):
+	if force or (int(time()) - timestamp) > delay:
 		from twilio.rest import TwilioRestClient
 		message = check_message(message.strip())
 		tclient = TwilioRestClient(sid, token)

@@ -1,7 +1,7 @@
 {
     "acct_sid": "",
     "acct_token": "",
-    "delay": 60,
+    "delay": 3600,
     "force": 0,
     "from_number": "",
     "message": "",
